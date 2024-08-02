@@ -7,6 +7,8 @@ filter-datum
 import re
 from typing import List
 import logging
+import mysql.connector
+import os
 
 
 class RedactingFormatter(logging.Formatter):
@@ -57,3 +59,19 @@ def get_logger() -> logging.Logger:
     streamHandler.setFormatter(formatter)
     logger.addHandler(streamHandler)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    connector to the db
+    """
+    user_name = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    passw = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+    return mysql.connector.connect(
+        user=user_name,
+        password=passw,
+        host=host,
+        database=db_name
+    )
