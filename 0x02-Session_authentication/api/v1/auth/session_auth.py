@@ -13,7 +13,10 @@ class SessionAuth(Auth):
     """
     SessionAuth class
     """
-    user_id_by_session_id = {}
+    def __init__(self):
+        """Initialize the session auth"""
+        super().__init__()
+        self.user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
         """
@@ -37,7 +40,7 @@ class SessionAuth(Auth):
         """
         current user function
         """
-        session_id = self.create_session(request)
+        session_id = self.session_cookie(request)
         if session_id is None:
             return None
         user_id = self.user_id_for_session_id(session_id)
