@@ -48,9 +48,3 @@ class SessionAuth(Auth):
         if user_id is None:
             return None
         return User.get(user_id)
-
-    def session_cookie_name(self) -> str:
-        """
-        Return the session cookie name
-        """
-        return getenv('SESSION_NAME', '_my_session_id')
