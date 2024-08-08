@@ -6,7 +6,7 @@ Session authentication module
 from api.v1.auth.auth import Auth
 from models.user import User
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from typing import Tuple
 from os import getenv
 
@@ -41,3 +41,15 @@ def login() -> Tuple[str, int]:
         return response
     
     return jsonify({'error': 'wrong password'}), 401
+
+@app_views.route(
+    '/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def logout() -> Tuple[str, int]:
+    """
+    logout
+    """
+    from api.v1.app import auth
+    dest = auth.destroy_session()
+    if not dest:
+        abort(404)
+    return jsonify({})
