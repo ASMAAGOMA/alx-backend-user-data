@@ -40,7 +40,7 @@ class SessionAuth(Auth):
         session_id = self.create_session(request)
         if session_id is None:
             return None
-        user_id = self.user_id_by_session_id(session_id)
+        user_id = self.user_id_for_session_id(session_id)
         if user_id is None:
             return None
         return User.get(user_id)
