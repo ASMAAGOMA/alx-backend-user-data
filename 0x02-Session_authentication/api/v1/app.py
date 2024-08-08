@@ -30,6 +30,7 @@ def before_request():
     """
     befotr requset func
     """
+    request.current_user = auth.current_user(request)
     if auth is None:
         return
     if not auth.require_auth(request.path,
