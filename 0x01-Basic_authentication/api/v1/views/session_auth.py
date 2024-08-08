@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 """
-session auth module
+Session authentication module
 """
-
 
 from api.v1.auth.auth import Auth
 from models.user import User
 from api.v1.views import app_views
 from flask import request, jsonify
-from os import getenv
-
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login():
     """
-    login 
+    Handle session-based login
     """
-    from api.v1.app import auth
     email = request.form.get('email')
     if not email:
         return jsonify({'error': 'email missing'}), 400
@@ -29,7 +25,8 @@ def login():
     user = users[0]
     if not user.is_valid_password(password):
         return jsonify({'error': 'wrong password'}), 401
+    from api.v1.app import auth
     session_id = auth.create_session(user.id)
     response = jsonify(user.to_json())
-    response.set_cookie(getenv('SESSION_NAME'), session_id)
+    response.set_cookie(auth.session_name, session_id)
     return response
